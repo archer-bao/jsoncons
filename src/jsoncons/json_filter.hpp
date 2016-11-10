@@ -8,7 +8,7 @@
 #define JSONCONS_JSON_FILTER_HPP
 
 #include <string>
-
+#include <functional>
 #include <jsoncons/json_input_handler.hpp>
 #include <jsoncons/json_output_handler.hpp>
 #include <jsoncons/parse_error_handler.hpp>
@@ -391,6 +391,18 @@ private:
             this->downstream_handler().name(p,length,context);
         }
     }
+};
+
+template <class CharT>
+struct basic_json_filter_criteria
+{
+    basic_json_filter_criteria()
+        : if_name([](const std::basic_string<CharT>&) {return true; }),
+          if_index([](size_t) {return true; })
+    {
+    }
+    std::function<bool(std::basic_string<CharT>)> if_name;
+    std::function<bool(size_t)> if_index;
 };
 
 typedef basic_json_filter<char> json_filter;

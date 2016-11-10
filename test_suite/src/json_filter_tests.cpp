@@ -171,4 +171,10 @@ BOOST_AUTO_TEST_CASE(test_chained_filters)
     BOOST_CHECK(j2["fourth"] == 4);
 }
 
+BOOST_AUTO_TEST_CASE(test_filter_criteria)
+{
+    basic_json_filter_criteria<char> criteria;
+    criteria.if_name = [](const std::string& name) {return true; };
+}
+
 BOOST_AUTO_TEST_SUITE_END()
