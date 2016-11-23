@@ -111,6 +111,11 @@ public:
         do_string_value(p, std::char_traits<CharT>::length(p));
     }
 
+    void integer_value(const CharT* p, size_t length) 
+    {
+        do_integer_value(p, length);
+    }
+
     void value(int value) 
     {
         do_integer_value(value);
@@ -178,6 +183,8 @@ private:
 
     virtual void do_double_value(double value, uint8_t precision) = 0;
 
+    virtual void do_integer_value(const CharT* p, size_t length) = 0;
+
     virtual void do_integer_value(int64_t value) = 0;
 
     virtual void do_uinteger_value(uint64_t value) = 0;
@@ -231,6 +238,10 @@ private:
     }
 
     void do_double_value(double, uint8_t) override
+    {
+    }
+
+    void do_integer_value(const CharT*, size_t) override
     {
     }
 

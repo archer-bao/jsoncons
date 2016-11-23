@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE(test_string_to_double)
 
 BOOST_AUTO_TEST_CASE(test_exponent)
 {
-    jsoncons::float_reader reader;
+    jsoncons::float_reader<char> reader;
     const char* begin = "1.15507e-173";
     const char* endptr = begin + strlen(begin);
     const double value1 = 1.15507e-173;

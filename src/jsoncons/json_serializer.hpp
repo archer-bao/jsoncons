@@ -296,7 +296,7 @@ private:
         bos_.write(buf.first,buf.second);
 
         end_value();
-    }
+    } 
 
     void do_string_value(const CharT* value, size_t length) override
     {
@@ -336,6 +336,16 @@ private:
             fp_.print(value,precision,bos_);
         }
 
+        end_value();
+    }
+
+    void do_integer_value(const CharT* p, size_t length) override
+    {
+        if (!stack_.empty() && !stack_.back().is_object())
+        {
+            begin_scalar_value();
+        }
+        bos_.write(p,length);
         end_value();
     }
 

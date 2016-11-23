@@ -225,6 +225,41 @@ private:
         }
     }
 
+    void do_integer_value(const char_type* p, size_t length, 
+                          const basic_parsing_context<char_type>& context) override
+    {
+        if (*p == '-')
+        {
+            int64_t val;
+            if (try_string_to_integer(true, p+1, length-1, val))
+            {
+                stack_[top_].value_ = val;
+            }
+            else
+            {
+                this->error_handler().fatal_error(json_parser_errc::invalid_number,
+                                                  context);
+            }
+        }
+        else
+        {
+            uint64_t val;
+            if (try_string_to_uinteger(p, length, val))
+            {
+                stack_[top_].value_ = val;
+            }
+            else
+            {
+                this->error_handler().fatal_error(json_parser_errc::invalid_number,
+                                                  context);
+            }
+        }
+        if (++top_ >= stack_.size())
+        {
+            stack_.resize(top_*2);
+        }
+    }
+
     void do_uinteger_value(uint64_t value, const basic_parsing_context<char_type>&) override
     {
         stack_[top_].value_ = value;

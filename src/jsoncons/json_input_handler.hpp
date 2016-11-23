@@ -9,17 +9,32 @@
 
 #include <string>
 #include <jsoncons/json_text_traits.hpp>
+#include <jsoncons/parse_error_handler.hpp>
 
 namespace jsoncons {
 
 template <class CharT>
-class basic_parsing_context;
-
-template <class CharT>
 class basic_json_input_handler
 {
+private:
+    basic_default_parse_error_handler<CharT> default_err_handler_;
+    basic_parse_error_handler<CharT> *err_handler_;
 public:
+    basic_json_input_handler()
+        : err_handler_(&default_err_handler_)
+    {}
+
     virtual ~basic_json_input_handler() {}
+
+    basic_parse_error_handler<CharT>& error_handler() 
+    {
+        return *err_handler_;
+    }
+
+    void error_handler(basic_parse_error_handler<CharT>& err_handler) 
+    {
+        err_handler_ = std::addressof(err_handler);
+    }
 
     void begin_json()
     {
@@ -74,6 +89,12 @@ public:
     void value(const CharT* p, const basic_parsing_context<CharT>& context) 
     {
         do_string_value(p, std::char_traits<CharT>::length(p), context);
+    }
+
+    void integer_value(const CharT* p, size_t length, 
+                       const basic_parsing_context<CharT>& context) 
+    {
+        do_integer_value(p, length, context);
     }
 
     void value(int value, const basic_parsing_context<CharT>& context) 
@@ -147,6 +168,9 @@ private:
 
     virtual void do_double_value(double value, uint8_t precision, const basic_parsing_context<CharT>& context) = 0;
 
+    virtual void do_integer_value(const CharT* p, size_t length,
+                                  const basic_parsing_context<CharT>& context) = 0;
+
     virtual void do_integer_value(int64_t value, const basic_parsing_context<CharT>& context) = 0;
 
     virtual void do_uinteger_value(uint64_t value, const basic_parsing_context<CharT>& context) = 0;
@@ -205,6 +229,11 @@ private:
     }
 
     void do_double_value(double, uint8_t, const basic_parsing_context<CharT>&) override
+    {
+    }
+
+    void do_integer_value(const CharT*, size_t, 
+                          const basic_parsing_context<CharT>&) override
     {
     }
 

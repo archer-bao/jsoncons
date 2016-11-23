@@ -495,6 +495,10 @@ private:
                    jsonx_char_traits<CharT>::end_string_element_literal().length());
     }
 
+    void do_integer_value(const CharT* p, size_t length) override
+    {
+    }
+
     void do_double_value(double value, uint8_t precision) override
     {
         JSONCONS_ASSERT(!stack_.empty());

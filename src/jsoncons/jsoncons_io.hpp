@@ -358,9 +358,14 @@ public:
 #define float_printer ostringstream_float_printer
 #endif
 
-// string_to_float only requires narrow char
-#if defined(_MSC_VER)
+template <class CharT>
 class float_reader
+{
+};
+
+#if defined(_MSC_VER)
+template <>
+class float_reader<char>
 {
 private:
     _locale_t locale_;
@@ -389,8 +394,39 @@ public:
     float_reader(const float_reader& fr) = delete;
     float_reader& operator=(const float_reader& fr) = delete;
 };
+template <>
+class float_reader<wchar_t>
+{
+private:
+    _locale_t locale_;
+public:
+    float_reader()
+    {
+        locale_ = _create_locale(LC_NUMERIC, "C");
+    }
+    ~float_reader()
+    {
+        _free_locale(locale_);
+    }
+
+    double read(const wchar_t* s, size_t)
+    {
+        const wchar_t *begin = s;
+        wchar_t *end = nullptr;
+        double val = _wcstod_l(begin, &end, locale_);
+        if (begin == end)
+        {
+            throw std::invalid_argument("Invalid float value");
+        }
+        return val;
+    }
+
+    float_reader(const float_reader& fr) = delete;
+    float_reader& operator=(const float_reader& fr) = delete;
+};
 #elif defined(ANDROID) || defined(__ANDROID__)
-class float_reader
+template<>
+class float_reader<char>
 {
 private:
     locale_t locale_;
@@ -419,8 +455,41 @@ public:
     float_reader(const float_reader& fr) = delete;
     float_reader& operator=(const float_reader& fr) = delete;
 };
+
+template<>
+class float_reader<wchar_t>
+{
+private:
+    locale_t locale_;
+public:
+    float_reader()
+    {
+        locale_ = newlocale(LC_ALL_MASK, "C", (locale_t) 0);
+    }
+    ~float_reader()
+    {
+        free(locale_);
+    }
+
+    double read(const wchar_t* s, size_t length)
+    {
+        const wchar_t *begin = s;
+        wchar_t *end = nullptr;
+        double val = wstrtod_l(begin, &end, locale_);
+        if (begin == end)
+        {
+            throw std::invalid_argument("Invalid float value");
+        }
+        return val;
+    }
+
+    float_reader(const float_reader& fr) = delete;
+    float_reader& operator=(const float_reader& fr) = delete;
+};
 #else
-class float_reader
+
+template <>
+class float_reader<char>
 {
 private:
     std::vector<char> buffer_;
@@ -476,6 +545,76 @@ public:
             }
             const char *begin = buffer_.data();
             char *end = nullptr;
+            val = strtod(begin, &end);
+            if (begin == end)
+            {
+                throw std::invalid_argument("Invalid float value");
+            }
+        }
+        return val;
+    }
+
+    float_reader(const float_reader& fr) = delete;
+    float_reader& operator=(const float_reader& fr) = delete;
+};
+
+template <>
+class float_reader<wchar_t>
+{
+private:
+    std::vector<wchar_t> buffer_;
+    std::string decimal_point_;
+    bool is_dot_;
+public:
+    float_reader()
+        : buffer_()
+    {
+        struct lconv * lc = localeconv();
+        if (lc != nullptr)
+        {
+            decimal_point_ = std::string(lc->decimal_point);    
+        }
+        else
+        {
+            decimal_point_ = std::string("."); 
+        }
+        buffer_.reserve(100);
+        is_dot_ = decimal_point_ == ".";
+    }
+
+    double read(const wchar_t* s, size_t length)
+    {
+        double val;
+        if (is_dot_)
+        {
+            const wchar_t *begin = s;
+            wchar_t *end = nullptr;
+            val = wstrtod(begin, &end);
+            if (begin == end)
+            {
+                throw std::invalid_argument("Invalid float value");
+            }
+        }
+        else
+        {
+            buffer_.clear();
+            size_t j = 0;
+            const wchar_t* pe = s + length;
+            for (const wchar_t* p = s; p < pe; ++p)
+            {
+                if (*p == '.')
+                {
+                    buffer_.insert(buffer_.begin() + j, decimal_point_.begin(), decimal_point_.end());
+                    j += decimal_point_.length();
+                }
+                else
+                {
+                    buffer_.push_back(*p);
+                    ++j;
+                }
+            }
+            const wchar_t *begin = buffer_.data();
+            wchar_t *end = nullptr;
             val = strtod(begin, &end);
             if (begin == end)
             {

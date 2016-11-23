@@ -82,6 +82,12 @@ private:
         output_handler_->value(value, length);
     }
 
+    void do_integer_value(const CharT* p, size_t length, 
+                          const basic_parsing_context<CharT>&) override
+    {
+        output_handler_->integer_value(p, length);
+    }
+
     void do_integer_value(int64_t value, const basic_parsing_context<CharT>&) override
     {
         output_handler_->value(value);
@@ -189,6 +195,11 @@ private:
     void do_string_value(const CharT* value, size_t length) override
     {
         input_handler_->value(value, length, default_context_);
+    }
+
+    void do_integer_value(const CharT* p, size_t length) override
+    {
+        input_handler_->integer_value(p, length, default_context_);
     }
 
     void do_integer_value(int64_t value) override
@@ -310,8 +321,14 @@ private:
         downstream_handler_->value(value,precision,context);
     }
 
+    void do_integer_value(const CharT* p, size_t length,
+                          const basic_parsing_context<CharT>& context) override
+    {
+        downstream_handler_->integer_value(p, length, context);
+    }
+
     void do_integer_value(int64_t value,
-                 const basic_parsing_context<CharT>& context) override
+                          const basic_parsing_context<CharT>& context) override
     {
         downstream_handler_->value(value,context);
     }

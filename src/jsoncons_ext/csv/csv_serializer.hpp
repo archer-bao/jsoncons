@@ -300,6 +300,25 @@ private:
         }
     }
 
+    void do_integer_value(const CharT* p, size_t length) override
+    {
+        if (stack_.size() == 2 && !stack_.back().skip_)
+        {
+            if (stack_.back().is_object() && stack_[0].count_ == 0 && parameters_.column_names().size() == 0)
+            {
+                begin_value(header_os_);
+                header_os_.write(p, length);
+                end_value();
+            }
+            else
+            {
+                begin_value(os_);
+                os_.write(p, length);
+                end_value();
+            }
+        }
+    }
+
     void do_integer_value(int64_t val) override
     {
         if (stack_.size() == 2 && !stack_.back().skip_)
