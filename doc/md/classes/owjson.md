@@ -15,7 +15,7 @@ The `jsoncons` library will always rebind the supplied allocator from the templa
 ```
 ### Interface
 
-The interface is the same as [wjson](classes/wjson.md), substituting wide character instantiations of classes - `std::wstring`, `std::wistream`, etc. - for narrow character ones.
+The interface is the same as [wjson](wjson.md), substituting wide character instantiations of classes - `std::wstring`, `std::wistream`, etc. - for narrow character ones.
 
 - `owjson`, like `wjson`, supports object member `set` methods that take an `object_iterator` as the first parameter. But while with `wjson` that parameter is just a hint that allows optimization, with `owjson` it is the actual location where to insert the member.
 
@@ -23,9 +23,9 @@ The interface is the same as [wjson](classes/wjson.md), substituting wide charac
 
 ### See also
 
-- [wjson](classes/wjson.md) constructs a wide character json value that sorts name-value members alphabetically
+- [wjson](wjson.md) constructs a wide character json value that sorts name-value members alphabetically
 
-- [json](classes/json.md) constructs a narrow character json value that sorts name-value members alphabetically
+- [json](json.md) constructs a narrow character json value that sorts name-value members alphabetically
 
-- [ojson](classes/ojson.md) constructs a narrow character json value that preserves the original insertion order of an object's name/value pairs
+- [ojson](ojson.md) constructs a narrow character json value that preserves the original insertion order of an object's name/value pairs
 

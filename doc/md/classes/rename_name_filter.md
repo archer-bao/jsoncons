@@ -14,7 +14,7 @@ Renames object member names.
 
 ### Base classes
 
-[json_filter](classes/json_filter.md)
+[json_filter](json_filter.md)
 
 ### Constructors
 
