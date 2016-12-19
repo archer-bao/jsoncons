@@ -89,6 +89,6 @@ Output:
 
 ### See also
 
-- [decode_message_pack](decode_message_pack) decodes a [MessagePack](http://msgpack.org/index.html) binary serialization format to a json value.
+- [decode_message_pack](classes/decode_message_pack.md) decodes a [MessagePack](http://msgpack.org/index.html) binary serialization format to a json value.
 
 

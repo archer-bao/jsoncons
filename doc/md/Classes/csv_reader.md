@@ -52,7 +52,7 @@ You must ensure that the input stream, input handler, and error handler exist as
 Returns `true` when there is no more data to be read from the stream, `false` otherwise
 
     void read()
-Reports JSON related events for JSON objects, arrays, object members and array elements to a [json_input_handler](json_input_handler), such as a [json_decoder](json_decoder).
+Reports JSON related events for JSON objects, arrays, object members and array elements to a [json_input_handler](json_input_handler), such as a [json_decoder](classes/json_decoder.md).
 Throws [parse_exception](parse_exception) if parsing fails.
 
     size_t buffer_capacity() const

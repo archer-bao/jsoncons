@@ -5,7 +5,7 @@ typedef basic_json<char,
                    JsonTraits = json_traits<char>,
                    Allocator = std::allocator<char>> json
 ```
-The `json` class is an instantiation of the `basic_json` class template that uses `char` as the character type. The order of an object's name/value pairs is not preserved, they are sorted alphabetically by name. If you want to preserve the original insertion order, use [ojson](ojson) instead.
+The `json` class is an instantiation of the `basic_json` class template that uses `char` as the character type. The order of an object's name/value pairs is not preserved, they are sorted alphabetically by name. If you want to preserve the original insertion order, use [ojson](classes/ojson.md) instead.
 
 The `jsoncons` library will always rebind the supplied allocator from the template parameter to internal data structures.
 
@@ -358,7 +358,7 @@ Inserts json value into stream with default serialization options.
 Inserts json value into stream using specified [serialization_options](serialization_options).
 
     void write_body(json_output_handler& handler) const
-Emits JSON events for JSON objects, arrays, object members and array elements to a [json_output_handler](json_output_handler), such as a [json_serializer](json_serializer).
+Emits JSON events for JSON objects, arrays, object members and array elements to a [json_output_handler](json_output_handler), such as a [json_serializer](classes/json_serializer.md).
 
 ### Non member functions
 
@@ -385,11 +385,11 @@ As the `jsoncons` library has evolved, names have sometimes changed. To ease tra
 
 ### See also
 
-- [ojson](ojson) constructs a json value that preserves the original name-value insertion order
+- [ojson](classes/ojson.md) constructs a json value that preserves the original name-value insertion order
 
-- [wjson](wjson) constructs a wide character json value that sorts name-value members alphabetically
+- [wjson](classes/wjson.md) constructs a wide character json value that sorts name-value members alphabetically
 
-- [owjson](owjson) constructs a wide character json value that preserves the original name-value insertion order
+- [owjson](classes/owjson.md) constructs a wide character json value that preserves the original name-value insertion order
 
 ## Examples
 

@@ -2,9 +2,9 @@
 
     typedef basic_parse_error_handler<char> parse_error_handler
 
-When parsing JSON text with [json_reader](json_reader), if you need to implement
+When parsing JSON text with [json_reader](classes/json_reader.md), if you need to implement
 customized error handling, you must implement this abstract class
-and pass it in the constructor of [json_reader](json_reader). The `read` method 
+and pass it in the constructor of [json_reader](classes/json_reader.md). The `read` method 
 will then report all warnings and errors through this interface.
 
 ### Header
